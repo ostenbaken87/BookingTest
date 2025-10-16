@@ -16,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        $middleware->validateCsrfTokens(except: [
+            '/services',
+            '/bookings',
+            '/bookings/available-slots',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,6 +15,14 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/booking', function () {
+    return Inertia::render('Booking');
+})->name('booking');
+
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/bookings/available-slots', [BookingController::class, 'getAvailableSlots'])->name('bookings.available-slots');
+Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

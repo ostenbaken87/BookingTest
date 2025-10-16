@@ -1,61 +1,345 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Backend
+- PHP 8.2+
+- Laravel 12 - PHP фреймворк
+- PostgreSQL 15 - База данных
+- Redis - Кеширование и очереди
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Frontend
+- Vue.js 3.4 - JavaScript фреймворк
+- Inertia.js 2.0 - Связь между Laravel и Vue
+- Tailwind CSS 3 - CSS фреймворк
+- Vite 6 - Сборщик модулей
 
-## About Laravel
+DevOps
+- Docker & Docker Compose - Контейнеризация
+- Nginx - Web-сервер
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Установка и запуск
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. Клонирование репозитория
 
-## Learning Laravel
+```bash
+git clone <repository-url>
+cd BookingTest
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Создание .env файла
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+cp .env.example .env
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Настройте переменные окружения:
+```env
+APP_NAME="Booking System"
+APP_PORT=8001
 
-## Laravel Sponsors
+DB_CONNECTION=pgsql
+DB_HOST=db
+DB_PORT=5432
+DB_DATABASE=booking
+DB_USERNAME=postgres
+DB_PASSWORD=secret
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+REDIS_HOST=redis
+REDIS_PORT=6379
+```
 
-### Premium Partners
+### 3. Запуск через Make
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+# Первоначальная инициализация (сборка контейнеров)
+make init
 
-## Contributing
+# Генерация ключа приложения
+make keygen
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Запуск миграций и заполнение тестовыми данными
+make fresh-seed
+```
 
-## Code of Conduct
+### 4. Запуск Vite для frontend
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+В отдельном терминале:
+```bash
+npm run dev
+```
 
-## Security Vulnerabilities
+### 5. Открытие приложения
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Перейдите в браузере:
+```
+http://localhost:8001
+```
 
-## License
+## 📂 Структура проекта
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+BookingTest/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── ServiceController.php      # Контроллер услуг
+│   │   │   └── BookingController.php      # Контроллер бронирований
+│   │   ├── Requests/
+│   │   │   └── BookingRequest.php         # Валидация бронирования
+│   │   └── Resources/
+│   │       ├── ServiceResource.php        # Сериализация услуг
+│   │       └── BookingResource.php        # Сериализация бронирований
+│   ├── Models/
+│   │   ├── Service.php                    # Модель услуги
+│   │   └── Booking.php                    # Модель бронирования
+│   └── Services/
+│       └── BookingService.php             # Бизнес-логика бронирования
+├── database/
+│   ├── migrations/
+│   │   ├── 2025_10_16_*_create_services_table.php
+│   │   └── 2025_10_16_*_create_bookings_table.php
+│   └── seeders/
+│       ├── ServiceSeeder.php              # Заполнение услуг
+│       └── BookingSeeder.php              # Тестовые бронирования
+├── resources/
+│   └── js/
+│       ├── Pages/
+│       │   └── Booking.vue                # Главная страница бронирования
+│       └── Components/
+│           └── Booking/
+│               ├── ServiceCard.vue        # Карточка услуги
+│               ├── WeekCalendar.vue       # Календарь недели
+│               ├── TimeSlotPicker.vue     # Выбор временных слотов
+│               ├── BookingForm.vue        # Форма бронирования
+│               └── SuccessModal.vue       # Модальное окно успеха
+├── docs/
+│   └── RACE_CONDITION.md                  # Документация по race condition
+├── docker-compose.yml
+├── Dockerfile
+├── makefile                               # Make команды
+└── README.md
+```
+
+## ⚡ Функциональность
+
+### Бронирование
+
+1. **Выбор услуги** - отображение доступных услуг с длительностью
+2. **Выбор даты** - календарь текущей недели (воскресенье заблокировано)
+3. **Выбор времени** - доступные временные слоты (10:00-20:00 МСК)
+4. **Форма клиента** - ввод имени и телефона
+5. **Подтверждение** - модальное окно с деталями бронирования
+
+### Ограничения
+
+- ⏰ Бронирование доступно только с **10:00 до 20:00** (МСК)
+- 📅 Бронирование в **воскресенье заблокировано**
+- ⏱️ Продолжительность = длительность услуги + **30 минут** (подготовка)
+- 🚫 Нельзя забронировать уже занятое время
+- 📞 Телефон в формате: **+7 (XXX) XXX-XX-XX**
+
+### Доступные услуги
+
+1. **Поездка на квадроцикле**
+   - 30 минут (итого 60 мин с подготовкой)
+   - 60 минут (итого 90 мин с подготовкой)
+
+2. **Тур на эндуро**
+   - 60 минут (итого 90 мин с подготовкой)
+   - 120 минут (итого 150 мин с подготовкой)
+
+## 🔌 API Endpoints
+
+### Получить список услуг
+```http
+GET /services
+```
+
+**Ответ:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Поездка на квадроцикле",
+      "duration_minutes": 30,
+      "duration_display": "30 мин"
+    }
+  ]
+}
+```
+
+### Получить доступные слоты
+```http
+GET /bookings/available-slots?service_id=1&date=2025-10-16
+```
+
+**Ответ:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "start_time": "10:00",
+      "end_time": "11:00",
+      "display": "10:00"
+    }
+  ]
+}
+```
+
+### Создать бронирование
+```http
+POST /bookings
+Content-Type: application/json
+
+{
+  "service_id": 1,
+  "booking_date": "2025-10-16",
+  "start_time": "10:00",
+  "client_name": "Иван Иванов",
+  "client_phone": "+7 (900) 123-45-67"
+}
+```
+
+**Успешный ответ (201):**
+```json
+{
+  "success": true,
+  "message": "Бронирование успешно создано!",
+  "data": {
+    "id": 1,
+    "service_id": 1,
+    "booking_date": "2025-10-16",
+    "start_time": "10:00",
+    "end_time": "11:00",
+    "status": "active"
+  }
+}
+```
+
+**Ошибка (422):**
+```json
+{
+  "success": false,
+  "message": "Выбранное время уже забронировано."
+}
+```
+
+## 🗄️ База данных
+
+### Таблица `services` (Услуги)
+
+| Поле              | Тип      | Описание                    |
+|-------------------|----------|-----------------------------|
+| id                | bigint   | Первичный ключ              |
+| name              | string   | Название услуги             |
+| duration_minutes  | integer  | Длительность в минутах      |
+| created_at        | timestamp| Дата создания               |
+| updated_at        | timestamp| Дата обновления             |
+
+**Индексы:**
+- `(name, duration_minutes)` - для быстрого поиска
+
+### Таблица `bookings` (Бронирования)
+
+| Поле          | Тип      | Описание                       |
+|---------------|----------|--------------------------------|
+| id            | bigint   | Первичный ключ                 |
+| service_id    | bigint   | FK → services.id               |
+| client_name   | string   | Имя клиента                    |
+| client_phone  | string   | Телефон клиента                |
+| booking_date  | date     | Дата бронирования              |
+| start_time    | time     | Время начала                   |
+| end_time      | time     | Время окончания                |
+| status        | enum     | active, cancelled              |
+| created_at    | timestamp| Дата создания                  |
+| updated_at    | timestamp| Дата обновления                |
+
+**Индексы:**
+- `(service_id, booking_date, start_time, end_time, status)` - для проверки пересечений
+- **UNIQUE** `(service_id, booking_date, start_time, status)` - защита от дублирования
+
+### Связи
+
+```
+services (1) ──→ (N) bookings
+```
+
+## 🔒 Race Condition
+
+Система защищена от одновременного бронирования одного слота несколькими пользователями.
+
+### Механизмы защиты:
+
+1. **Database Transactions** - атомарность операций
+2. **Pessimistic Locking** - блокировка записей на время транзакции
+3. **Unique Constraint** - уникальный индекс в БД
+4. **Двойная проверка** - до и внутри транзакции
+
+Подробнее: [docs/RACE_CONDITION.md](docs/RACE_CONDITION.md)
+
+## 🧪 Тестирование
+
+### Запуск тестов
+
+```bash
+docker-compose exec app php artisan test
+```
+
+### Ручное тестирование race condition
+
+1. Откройте два браузера
+2. Выберите одинаковые услугу, дату и время в обоих
+3. Одновременно нажмите "Забронировать"
+4. Результат: только одно бронирование создастся
+
+## 📝 Useful Commands (Make)
+
+```bash
+make help           # Показать все доступные команды
+make build          # Пересобрать контейнеры
+make up             # Запустить контейнеры
+make down           # Остановить контейнеры
+make restart        # Перезапустить контейнеры
+make migrate        # Запустить миграции
+make fresh-seed     # Пересоздать БД с тестовыми данными
+```
+
+## 🔧 Troubleshooting
+
+### Проблема: "Connection refused" к БД
+
+**Решение:**
+```bash
+make down
+make up
+# Подождите 10-15 секунд для инициализации PostgreSQL
+make migrate
+```
+
+### Проблема: Vite не компилирует файлы
+
+**Решение:**
+```bash
+npm install
+npm run build
+```
+
+### Проблема: "Class not found"
+
+**Решение:**
+```bash
+docker-compose exec app composer dump-autoload
+```
+
+## 📄 Лицензия
+
+MIT License
+
+## 👨‍💻 Автор
+
+Разработано как тестовое задание для демонстрации навыков работы с Laravel, Vue.js и Inertia.js.
+
+---
+
+**Дата создания:** Октябрь 2025  
+**Версия:** 1.0.0
